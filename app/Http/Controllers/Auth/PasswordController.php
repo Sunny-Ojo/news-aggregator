@@ -16,7 +16,7 @@ class PasswordController extends Controller
     try {
         $response = $this->authService->sendPasswordResetLink($passwordResetRequest->validated());
         if ($response['success']) {
-            return $this->successResponse(null, __('auth.password_reset'));
+            return $this->successResponse(null, __('passwords.sent'));
         }
         return $this->errorResponse($response['errors'], 400);
 
@@ -31,7 +31,7 @@ public function resetPassword(ResetPasswordRequest $request)
         $response = $this->authService->resetPassword($request->validated());
 
         if ($response['success']) {
-            return $this->successResponse(null, __('auth.password_changed'));
+            return $this->successResponse(null, __('passwords.reset'));
         }
 
         return $this->errorResponse($response['errors'], 400);
