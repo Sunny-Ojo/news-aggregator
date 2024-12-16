@@ -59,7 +59,10 @@ class ArticleService
      */
     public function getCategories(): Collection
     {
-        return Article::distinct()->pluck('category');
+        return Article::distinct()
+        ->whereNotNull('category')
+        ->where('category', '!=', '') //somehow, some of the api articles have empty string
+        ->pluck('category');
     }
 
     /**
@@ -69,7 +72,7 @@ class ArticleService
      */
     public function getSources(): Collection
     {
-        return Article::distinct()->pluck('source');
+        return Article::distinct()->whereNotNull('source')->pluck('source');
     }
 
     /**
@@ -79,7 +82,10 @@ class ArticleService
      */
     public function getAuthors(): Collection
     {
-        return Article::distinct()->pluck('author');
+        return  Article::distinct()
+        ->whereNotNull('author')
+        ->where('author', '!=', '') //somehow, some of the api articles have empty string
+        ->pluck('author');
     }
 
     /**
