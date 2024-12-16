@@ -22,10 +22,12 @@ cp .env.example .env
 
 php artisan key:generate
 
-php artisan migrate
+./vendor/bin/sail up -d
+
+./vendor/bin/sail artisan migrate
 
 ### API keys needs to be generated from the sources listed above and then add them to the .env respectively
 
 ## Scrapping the News
 
-Php artisan news:scrape
+./vendor/bin/sail php artisan news:scrape
