@@ -29,9 +29,11 @@ class ArticleService
     {
         $preferences = $request->user()->preferences;
         $query = Article::query()->inrandomOrder();
-        $query->when($preferences->categories, fn($q) => $q->whereIn('category', $preferences->categories))
-              ->when($preferences->sources, fn($q) => $q->whereIn('source', $preferences->sources))
-              ->when($preferences->authors, fn($q) => $q->whereIn('author', $preferences->authors));
+        if ($preferences) {
+                $query->when($preferences->categories, fn($q) => $q->whereIn('category', $preferences->categories))
+                    ->when($preferences->sources, fn($q) => $q->whereIn('source', $preferences->sources))
+                    ->when($preferences->authors, fn($q) => $q->whereIn('author', $preferences->authors));
+        }
 
         $this->applyFilters($query, $request);
 
