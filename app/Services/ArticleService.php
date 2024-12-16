@@ -3,10 +3,10 @@
 namespace App\Services;
 
 use App\DTOs\ArticleDto;
+use App\Filters\ArticleFilter;
 use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 
 class ArticleService
 {
@@ -23,13 +23,12 @@ class ArticleService
 
     /**
      * Get personalized feed of articles
-     * @param $preferences
      * @param \Illuminate\Http\Request $request
      */
-    public function getPersonalizedFeed($preferences, Request $request)
+    public function getPersonalizedFeed(Request $request)
     {
+        $preferences = $request->user()->preferences;
         $query = Article::query()->inrandomOrder();
-
         $query->when($preferences->categories, fn($q) => $q->whereIn('category', $preferences->categories))
               ->when($preferences->sources, fn($q) => $q->whereIn('source', $preferences->sources))
               ->when($preferences->authors, fn($q) => $q->whereIn('author', $preferences->authors));
@@ -54,7 +53,7 @@ class ArticleService
     /**
      * Get article categories
      *
-     * @return Article
+     * @return Collection
      */
     public function getCategories(): Collection
     {
@@ -64,7 +63,7 @@ class ArticleService
     /**
      * Get article sources
      *
-     * @return Article
+     * @return Collection
      */
     public function getSources(): Collection
     {
@@ -72,7 +71,17 @@ class ArticleService
     }
 
     /**
-     * Apply common search filters to the article query.
+     * Get article authors
+     *
+     * @return Collection
+     */
+    public function getAuthors(): Collection
+    {
+        return Article::distinct()->pluck('author');
+    }
+
+    /**
+     * Apply common search filters to the article query. (personalized feed uses this too)
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param \Illuminate\Http\Request $request
@@ -80,35 +89,7 @@ class ArticleService
      */
     protected function applyFilters($query, Request $request)
     {
-
-        if ($request->filled('keyword')) {
-            $query->where(function ($q) use ($request) {
-                Log::info($request->keyword);
-            return $q->whereAny([
-                    'title',
-                    'content',
-                    'description',
-                ], 'like', "%{$request->keyword}%");
-
-            });
-        }
-
-        if ($request->filled('start_date') && $request->filled('end_date')) {
-            $query->whereBetween('published_at', [$request->start_date, $request->end_date]);
-        }
-
-        if ($request->filled('category')) {
-            $query->where('category', trim($request->category));
-        }
-
-        if ($request->filled('source')) {
-            $query->where('source', trim($request->source));
-        }
-
-        if ($request->filled('author')) {
-            $query->where('author', trim($request->author));
-        }
-
+        (new ArticleFilter($request))->apply($query);
         return $query;
     }
 }

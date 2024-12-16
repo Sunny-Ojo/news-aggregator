@@ -16,7 +16,7 @@ class UserPreferenceRequest extends FormRequest
         return [
             'categories' => ['required', 'array'],
             'sources' => ['required', 'array'],
-            'authors' => ['required', 'array'],
+            'authors' => ['nullable', 'array'],
         ];
     }
 }
