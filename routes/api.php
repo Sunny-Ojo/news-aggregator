@@ -23,6 +23,7 @@ Route::post('reset-password', [PasswordController::class, 'resetPassword']);
 //articles
 Route::get('articles', [ArticleController::class, 'index']);
 Route::get('categories', [ArticleController::class, 'categories']);
+Route::get('authors', [ArticleController::class, 'authors']);
 Route::get('sources', [ArticleController::class, 'sources']);
 
 //user preferences

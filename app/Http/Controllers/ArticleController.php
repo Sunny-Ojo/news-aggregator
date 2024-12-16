@@ -28,7 +28,7 @@ class ArticleController extends Controller
     public function personalizedFeed(Request $request)
     {
        try {
-        $articles = $this->articleService->getPersonalizedFeed($request->user(), $request);
+        $articles = $this->articleService->getPersonalizedFeed($request);
         return $this->successResponse(ArticleResource::collection($articles));
        } catch (\Throwable $th) {
         Log::error('personalised articless fetch error: ' . $th->getMessage());
@@ -46,6 +46,18 @@ class ArticleController extends Controller
 
            }
     }
+
+    public function authors()
+    {
+        try {
+            return $this->successResponse($this->articleService->getAuthors());
+           } catch (\Throwable $th) {
+            Log::error('error getting article authors: ' . $th->getMessage());
+            return $this->errorResponse('Something went wrong. Please try again later.');
+
+           }
+    }
+
     public function sources()
     {
         try {
