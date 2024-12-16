@@ -13,7 +13,7 @@ class Article extends Model
      */
     protected $fillable = [
         'title',
-        'authors',
+        'author',
         'content',
         'url',
         'image_url',
@@ -22,5 +22,20 @@ class Article extends Model
         'description',
         'published_at'
     ];
-   
+
+    protected $perPage = 12;
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'published_at' => 'datetime',
+        ];
+    }
+
+
 }

@@ -16,11 +16,19 @@ trait JsonResponse
      */
     public function successResponse($data = [], string $message = "Operation Successful", int $statusCode = Response::HTTP_OK): \Illuminate\Http\JsonResponse
     {
-        return response()->json([
-            'success' => true,
-            'message' => $message,
-            'data' => $data,
-        ], $statusCode);
+        $response = [
+            "success" => true,
+            "message" => $message,
+            "data" => $data,
+        ];
+
+         if ($data instanceof \Illuminate\Http\Resources\Json\AnonymousResourceCollection) {
+            $paginationData = $data->response()->getData(true);
+            $response['meta'] = $paginationData['meta'] ?? null;
+            $response['links'] = $paginationData['links'] ?? null;
+        }
+
+        return response()->json($response, $statusCode);
     }
 
     /**
