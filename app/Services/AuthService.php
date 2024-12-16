@@ -20,6 +20,7 @@ class AuthService
             'email' => trim($data['email']),
             'password' => Hash::make($data['password']),
         ]);
+
         $token = $user->createToken('API_TOKEN')->plainTextToken;
         return [
             'user' => UserResource::make($user),
@@ -34,7 +35,7 @@ class AuthService
         }
 
         $user = Auth::user();
-        $token = $user->createToken('API_TOKEN')->plainTextToken;
+         $token = $user->createToken('API_TOKEN')->plainTextToken;
 
         return [
             'user' => UserResource::make($user),
@@ -52,7 +53,6 @@ class AuthService
         $status = Password::sendResetLink(
             ['email' => $data['email']]
         );
-        
         return $status === Password::RESET_LINK_SENT
             ? ['success' => true, 'message' => __($status)]
             : ['success' => false, 'errors' => __($status)];

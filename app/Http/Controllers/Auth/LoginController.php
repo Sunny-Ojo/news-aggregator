@@ -26,7 +26,7 @@ class LoginController extends Controller
     {
      try {
         $this->authService->logout(Auth::user());
-        return $this->successResponse(__('auth.logout_success'));
+        return $this->successResponse(null, __('auth.logout_success'));
      } catch (\Throwable $th) {
       return $this->errorResponse($th->getMessage(), Response::HTTP_BAD_REQUEST);
      }

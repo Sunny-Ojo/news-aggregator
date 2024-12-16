@@ -29,9 +29,11 @@ class ArticleService
     {
         $preferences = $request->user()->preferences;
         $query = Article::query()->inrandomOrder();
-        $query->when($preferences->categories, fn($q) => $q->whereIn('category', $preferences->categories))
-              ->when($preferences->sources, fn($q) => $q->whereIn('source', $preferences->sources))
-              ->when($preferences->authors, fn($q) => $q->whereIn('author', $preferences->authors));
+        if ($preferences) {
+                $query->when($preferences->categories, fn($q) => $q->whereIn('category', $preferences->categories))
+                    ->when($preferences->sources, fn($q) => $q->whereIn('source', $preferences->sources))
+                    ->when($preferences->authors, fn($q) => $q->whereIn('author', $preferences->authors));
+        }
 
         $this->applyFilters($query, $request);
 
@@ -57,7 +59,10 @@ class ArticleService
      */
     public function getCategories(): Collection
     {
-        return Article::distinct()->pluck('category');
+        return Article::distinct()
+        ->whereNotNull('category')
+        ->where('category', '!=', '') //somehow, some of the api articles have empty string
+        ->pluck('category');
     }
 
     /**
@@ -67,7 +72,7 @@ class ArticleService
      */
     public function getSources(): Collection
     {
-        return Article::distinct()->pluck('source');
+        return Article::distinct()->whereNotNull('source')->pluck('source');
     }
 
     /**
@@ -77,7 +82,10 @@ class ArticleService
      */
     public function getAuthors(): Collection
     {
-        return Article::distinct()->pluck('author');
+        return  Article::distinct()
+        ->whereNotNull('author')
+        ->where('author', '!=', '') //somehow, some of the api articles have empty string
+        ->pluck('author');
     }
 
     /**
