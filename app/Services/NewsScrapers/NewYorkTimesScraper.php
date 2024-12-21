@@ -4,13 +4,15 @@ namespace App\Services\NewsScrapers;
 
 use App\DTOs\ArticleDto;
 use App\Services\ArticleService;
-use Illuminate\Support\Facades\Log;
 
 class NewYorkTimesScraper extends BaseScraper
 {
     private string $baseUrl;
+
     private string $apiKey;
+
     private string $source = 'New York Times';
+
     /**
      * Create a new class instance.
      */
@@ -31,18 +33,17 @@ class NewYorkTimesScraper extends BaseScraper
             'api-key' => $this->apiKey,
         ];
         $articles = $this->fetchArticles('/topstories/v2/world.json', $queryParams);
-       $mappedArticles = $this->mapToDtos($articles);
-       $this->saveArticles($mappedArticles);
+        $mappedArticles = $this->mapToDtos($articles);
+        $this->saveArticles($mappedArticles);
 
     }
 
     /**
      * 	Fetch the articles
-     *
      */
     private function fetchArticles(string $endpoint, array $queryParams): array
     {
-        $url = $this->baseUrl . $endpoint;
+        $url = $this->baseUrl.$endpoint;
         $response = $this->sendRequest($url, $queryParams);
 
         return $response['results'] ?? [];
@@ -60,7 +61,7 @@ class NewYorkTimesScraper extends BaseScraper
                 $article['abstract'] ?? null,
                 $article['lead_paragraph'] ?? null,
                 $article['url'] ?? null,
-                !empty($article['multimedia']) ? end($article['multimedia'])['url'] : null,
+                ! empty($article['multimedia']) ? end($article['multimedia'])['url'] : null,
                 $this->source,
                 $article['section'] ?? null,
                 $article['published_date'] ?? null
@@ -68,5 +69,4 @@ class NewYorkTimesScraper extends BaseScraper
 
         }, $articles));
     }
-
 }

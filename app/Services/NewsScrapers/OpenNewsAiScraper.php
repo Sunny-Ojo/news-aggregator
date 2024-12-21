@@ -8,7 +8,9 @@ use App\Services\ArticleService;
 class OpenNewsAiScraper extends BaseScraper
 {
     private string $baseUrl;
+
     private string $apiKey;
+
     private string $source = 'NewsAPI';
 
     /**
@@ -29,21 +31,20 @@ class OpenNewsAiScraper extends BaseScraper
     {
         $queryParams = [
             'apiKey' => $this->apiKey,
-            'keyword' => 'everything'
+            'keyword' => 'everything',
         ];
         $articles = $this->fetchArticles('/article/getArticles', $queryParams);
-       $mappedArticles = $this->mapToDtos($articles);
-       $this->saveArticles($mappedArticles);
+        $mappedArticles = $this->mapToDtos($articles);
+        $this->saveArticles($mappedArticles);
 
     }
 
     /**
      * 	Fetch the articles
-     *
      */
     private function fetchArticles(string $endpoint, array $queryParams): array
     {
-        $url = $this->baseUrl . $endpoint;
+        $url = $this->baseUrl.$endpoint;
         $response = $this->sendRequest($url, $queryParams);
 
         return $response['articles']['results'] ?? [];
@@ -69,5 +70,4 @@ class OpenNewsAiScraper extends BaseScraper
 
         }, $articles));
     }
-
 }

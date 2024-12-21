@@ -19,7 +19,6 @@ Route::post('logout', [LoginController::class, 'logout'])->middleware('auth:sanc
 Route::post('forgot-password', [PasswordController::class, 'sendPasswordResetLink']);
 Route::post('reset-password', [PasswordController::class, 'resetPassword']);
 
-
 //articles
 Route::get('articles', [ArticleController::class, 'index']);
 Route::get('categories', [ArticleController::class, 'categories']);

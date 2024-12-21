@@ -15,13 +15,14 @@ class AuthService
 {
     public function register(array $data): array
     {
-        $user =  User::create([
+        $user = User::create([
             'name' => trim($data['name']),
             'email' => trim($data['email']),
             'password' => Hash::make($data['password']),
         ]);
 
         $token = $user->createToken('API_TOKEN')->plainTextToken;
+
         return [
             'user' => UserResource::make($user),
             'token' => $token,
@@ -30,12 +31,12 @@ class AuthService
 
     public function login(array $credentials): array
     {
-        if (!Auth::attempt($credentials)) {
+        if (! Auth::attempt($credentials)) {
             throw new ApiRequestException('Invalid credentials', 400);
         }
 
         $user = Auth::user();
-         $token = $user->createToken('API_TOKEN')->plainTextToken;
+        $token = $user->createToken('API_TOKEN')->plainTextToken;
 
         return [
             'user' => UserResource::make($user),
@@ -45,7 +46,7 @@ class AuthService
 
     public function logout(User $user): void
     {
-       $user->tokens()->delete();
+        $user->tokens()->delete();
     }
 
     public function sendPasswordResetLink(array $data): array
@@ -53,6 +54,7 @@ class AuthService
         $status = Password::sendResetLink(
             ['email' => $data['email']]
         );
+
         return $status === Password::RESET_LINK_SENT
             ? ['success' => true, 'message' => __($status)]
             : ['success' => false, 'errors' => __($status)];
@@ -64,7 +66,7 @@ class AuthService
             $data,
             function (User $user, string $password) {
                 $user->forceFill([
-                    'password' => Hash::make($password)
+                    'password' => Hash::make($password),
                 ])->setRememberToken(Str::random(60));
 
                 $user->save();

@@ -8,9 +8,13 @@ use App\Services\ArticleService;
 class NewsApiOrgScraper extends BaseScraper
 {
     private string $baseUrl;
+
     private string $apiKey;
+
     private string $source = 'NewsAPI Org';
+
     private string $category = 'Top Headlines';
+
     /**
      * Create a new class instance.
      */
@@ -29,14 +33,14 @@ class NewsApiOrgScraper extends BaseScraper
     {
         $queryParams = [
             'apiKey' => $this->apiKey,
-            'country' => 'us'
+            'country' => 'us',
         ];
 
         $articles = $this->fetchArticles('/top-headlines', $queryParams);
 
-       $mappedArticles = $this->mapToDtos($articles);
+        $mappedArticles = $this->mapToDtos($articles);
 
-       $this->saveArticles($mappedArticles);
+        $this->saveArticles($mappedArticles);
 
     }
 
@@ -45,7 +49,7 @@ class NewsApiOrgScraper extends BaseScraper
      */
     private function fetchArticles(string $endpoint, array $queryParams): array
     {
-        $url = $this->baseUrl . $endpoint;
+        $url = $this->baseUrl.$endpoint;
         $response = $this->sendRequest($url, $queryParams);
 
         return $response['articles'] ?? [];
@@ -60,6 +64,7 @@ class NewsApiOrgScraper extends BaseScraper
             if (empty($article['content']) && empty($article['description'])) {
                 return null;
             }
+
             return new ArticleDto(
                 $article['title'] ?? 'No Title',
                 $article['author'] ?? null,
@@ -73,5 +78,4 @@ class NewsApiOrgScraper extends BaseScraper
             );
         }, $articles));
     }
-
 }

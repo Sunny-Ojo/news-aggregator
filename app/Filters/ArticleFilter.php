@@ -2,9 +2,9 @@
 
 namespace App\Filters;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
-use Carbon\Carbon;
 
 class ArticleFilter
 {
@@ -21,11 +21,11 @@ class ArticleFilter
     public function apply(Builder $query): Builder
     {
         return $query
-            ->when($this->request->filled('keyword'), fn($q) => $this->filterByKeyword($q))
-            ->when($this->request->filled('date'), fn($q) => $this->filterByDate($q))
-            ->when($this->request->filled('category'), fn($q) => $this->filterByCategory($q))
-            ->when($this->request->filled('source'), fn($q) => $this->filterBySource($q))
-            ->when($this->request->filled('author'), fn($q) => $this->filterByAuthor($q));
+            ->when($this->request->filled('keyword'), fn ($q) => $this->filterByKeyword($q))
+            ->when($this->request->filled('date'), fn ($q) => $this->filterByDate($q))
+            ->when($this->request->filled('category'), fn ($q) => $this->filterByCategory($q))
+            ->when($this->request->filled('source'), fn ($q) => $this->filterBySource($q))
+            ->when($this->request->filled('author'), fn ($q) => $this->filterByAuthor($q));
     }
 
     /**
@@ -34,6 +34,7 @@ class ArticleFilter
     protected function filterByKeyword(Builder $query): Builder
     {
         $keyword = $this->request->input('keyword');
+
         return $query->whereAny([
             'title',
             'content',

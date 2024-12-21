@@ -21,8 +21,8 @@ class UserResource extends JsonResource
             'email' => $this->email,
             'preferences' => $this->whenLoaded(
                 'preferences',
-                fn() => UserPreferenceResource::make($this->preferences),
-                fn() => UserPreferenceResource::make($this->getOrCreatePreferences())
+                fn () => UserPreferenceResource::make($this->preferences),
+                fn () => UserPreferenceResource::make($this->getOrCreatePreferences())
             ),
         ];
     }
@@ -31,5 +31,4 @@ class UserResource extends JsonResource
     {
         return app()->make(UserPreferenceService::class)->getUserPreferences($this->id);
     }
-
 }

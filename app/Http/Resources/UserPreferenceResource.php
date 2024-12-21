@@ -18,7 +18,7 @@ class UserPreferenceResource extends JsonResource
             'id' => $this->id,
             'categories' => $this->categories ?? [],
             'sources' => $this->sources ?? [],
-            'authors' => $this->authors ?? []
+            'authors' => $this->authors ?? [],
         ];
     }
 }

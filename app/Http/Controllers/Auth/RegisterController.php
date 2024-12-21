@@ -15,6 +15,7 @@ class RegisterController extends Controller
     {
         try {
             $data = $this->authService->register($registerRequest->validated());
+
             return $this->successResponse($data, __('auth.registration_success'), Response::HTTP_CREATED);
         } catch (\Throwable $th) {
             return $this->errorResponse($th->getMessage(), Response::HTTP_UNPROCESSABLE_ENTITY);

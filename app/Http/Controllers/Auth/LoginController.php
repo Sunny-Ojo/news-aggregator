@@ -16,6 +16,7 @@ class LoginController extends Controller
     {
         try {
             $data = $this->authService->login($loginRequest->validated());
+
             return $this->successResponse($data, __('auth.login_success'), Response::HTTP_OK);
         } catch (\Throwable $th) {
             return $this->errorResponse($th->getMessage(), Response::HTTP_BAD_REQUEST);
@@ -24,11 +25,12 @@ class LoginController extends Controller
 
     public function logout()
     {
-     try {
-        $this->authService->logout(Auth::user());
-        return $this->successResponse(null, __('auth.logout_success'));
-     } catch (\Throwable $th) {
-      return $this->errorResponse($th->getMessage(), Response::HTTP_BAD_REQUEST);
-     }
+        try {
+            $this->authService->logout(Auth::user());
+
+            return $this->successResponse(null, __('auth.logout_success'));
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th->getMessage(), Response::HTTP_BAD_REQUEST);
+        }
     }
 }

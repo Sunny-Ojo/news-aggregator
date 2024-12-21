@@ -13,23 +13,24 @@ class UserPreferenceController extends Controller
 
     public function show()
     {
-       try {
-        $preferences = $this->userPreferenceService->getUserPreferences(Auth::id());
-        return $this->successResponse(UserPreferenceResource::make($preferences));
+        try {
+            $preferences = $this->userPreferenceService->getUserPreferences(Auth::id());
 
-       } catch (\Throwable $th) {
-        return $this->errorResponse($th->getMessage());
-       }
+            return $this->successResponse(UserPreferenceResource::make($preferences));
+
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th->getMessage());
+        }
     }
 
     public function update(UserPreferenceRequest $request)
     {
-       try {
-        $preferences = $this->userPreferenceService->updatePreferences(Auth::id(), $request->validated());
-        return $this->successResponse(UserPreferenceResource::make($preferences));
-       } catch (\Throwable $th) {
-        return $this->errorResponse($th->getMessage());
-       }
-    }
+        try {
+            $preferences = $this->userPreferenceService->updatePreferences(Auth::id(), $request->validated());
 
+            return $this->successResponse(UserPreferenceResource::make($preferences));
+        } catch (\Throwable $th) {
+            return $this->errorResponse($th->getMessage());
+        }
+    }
 }

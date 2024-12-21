@@ -2,30 +2,23 @@
 
 namespace App\Services\NewsScrapers;
 
-use Illuminate\Support\Facades\Http;
 use App\Services\ArticleService;
 use Exception;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 abstract class BaseScraper
 {
-    public function __construct(private readonly ArticleService $articleService)
-    {
-    }
+    public function __construct(private readonly ArticleService $articleService) {}
 
     /**
      * Scrape articles from the source. This ensures all extending classes have this same method
-     *
-     *
      */
     abstract public function scrape(): void;
 
     /**
      * Send an HTTP GET request to the given URL with optional query params.
      *
-     * @param string $url
-     * @param array $queryParams
-     * @return array
      * @throws Exception
      */
     protected function sendRequest(string $url, array $queryParams = []): array

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserPreference extends Model
 {
-      /**
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
@@ -19,7 +19,7 @@ class UserPreference extends Model
         'user_id',
     ];
 
-     /**
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -35,8 +35,6 @@ class UserPreference extends Model
 
     /**
      * Get the user that owns the Preference
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user(): BelongsTo
     {

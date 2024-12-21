@@ -20,7 +20,7 @@ class Article extends Model
         'source',
         'category',
         'description',
-        'published_at'
+        'published_at',
     ];
 
     protected $perPage = 12;
@@ -36,6 +36,4 @@ class Article extends Model
             'published_at' => 'datetime',
         ];
     }
-
-
 }

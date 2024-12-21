@@ -11,11 +11,8 @@ class ApiRequestException extends Exception
 
     /**
      * ApiRequestException Constructor
-     *
-     * @param string $message
-     * @param int $statusCode
      */
-    public function __construct(string $message = "Something went wrong", int $statusCode = Response::HTTP_BAD_REQUEST)
+    public function __construct(string $message = 'Something went wrong', int $statusCode = Response::HTTP_BAD_REQUEST)
     {
         parent::__construct($message);
         $this->statusCode = $statusCode;

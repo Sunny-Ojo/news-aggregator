@@ -18,8 +18,6 @@ class ArticleDto
 
     /**
      * Map the DTO to an array.
-     *
-     * @return array
      */
     public function toArray(): array
     {
