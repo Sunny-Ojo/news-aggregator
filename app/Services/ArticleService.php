@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Actions\CreateArticleAction;
 use App\DTOs\ArticleDto;
 use App\Filters\ArticleFilter;
 use App\Models\Article;
@@ -10,6 +11,8 @@ use Illuminate\Support\Collection;
 
 class ArticleService
 {
+    public function __construct(private CreateArticleAction $createArticleAction) {}
+
     /**
      * Get all articles
      */
@@ -42,11 +45,14 @@ class ArticleService
     /**
      * Save an article using an ArticleDto.
      */
-    public function store(ArticleDto $articleDto): Article
+    public function store(ArticleDto $articleDto): void
     {
-        $data = $articleDto->toArray();
+        try {
+            $this->createArticleAction->handle($articleDto);
 
-        return Article::updateOrCreate(['url' => $data['url']], $data);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     /**
